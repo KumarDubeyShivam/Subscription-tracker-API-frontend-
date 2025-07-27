@@ -336,18 +336,37 @@ export default function Dashboard() {
     const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
     const [menuOpen, setMenuOpen] = useState<boolean>(true);
     const [showForm, setShowForm] = useState<boolean>(false);
+    const [token, setToken] = useState<string | null>(null);
+    const [userId, setuserId] = useState<string | null>(null);
+    const [userName, setuserNmae] = useState<string | null>(null);
+    const [userEmail, setuserEmail] = useState<string | null>(null);
 
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    const userName = localStorage.getItem("userName");
-    const userEmail = localStorage.getItem("userEmail");
-    const router = useRouter();
+
 
     useEffect(() => {
-        if (!token) {
+        const t = localStorage.getItem('token');
+        if (!t) {
             router.push("/login");
         }
+        setToken(t);
     }, []);
+    useEffect(() => {
+        const t = localStorage.getItem('userId');
+        setToken(t);
+    }, []);
+    useEffect(() => {
+        const t = localStorage.getItem('userName');
+        setToken(t);
+    }, []);
+    useEffect(() => {
+        const t = localStorage.getItem('userEmail');
+        setToken(t);
+    }, []);
+
+
+    const router = useRouter();
+
+
 
     useEffect(() => {
         const fetchData = async () => {
