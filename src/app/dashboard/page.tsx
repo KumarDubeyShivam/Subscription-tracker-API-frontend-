@@ -50,7 +50,7 @@
 
 //        const fetchSubscriptions = async () => {
 //            try {
-//                //const res = await fetch(`http://localhost:5500/api/v1/users/${userId}`, {
+//                //const res = await fetch(`https://subscription-tracker-api-yf9b.onrender.com/api/v1/users/${userId}`, {
 //                //    method: "POST",
 //                //    headers: {
 //                //        "Content-Type": "application/json",
@@ -58,7 +58,7 @@
 //                //    },
 //                //    //body: JSON.stringify({ userId }),
 //                //});
-//                const res = await fetch(`http://localhost:5500/api/v1/subscriptions/user/${userId}`, {
+//                const res = await fetch(`https://subscription-tracker-api-yf9b.onrender.com/api/v1/subscriptions/user/${userId}`, {
 //                    method: "GET",
 //                    headers: {
 //                        "Content-Type": "application/json",
@@ -352,7 +352,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:5500/api/v1/subscriptions/user/${userId}`, {
+                const res = await fetch(`https://subscription-tracker-api-yf9b.onrender.com/api/v1/subscriptions/user/${userId}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -373,7 +373,7 @@ export default function Dashboard() {
     return (
         <div className="min-h-screen flex">
             <div className={`w-64 bg-indigo-700 text-white p-6 ${menuOpen ? "block" : "hidden"} md:block`}>
-                <h2 className="text-xl font-semibold mb-4">Dashboard Menu</h2>
+                <a href="/dashboard"><h2 className="text-xl font-semibold mb-4">Dashboard Menu</h2></a>
                 <ul className="space-y-3">
                     <li><button onClick={() => setShowForm(true)} className="hover:text-indigo-300">Add Subscription</button></li>
                     <li><a href="#" className="hover:text-indigo-300">Edit Subscription</a></li>

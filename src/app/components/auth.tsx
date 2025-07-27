@@ -15,7 +15,7 @@
 //        const endpoint = type === "login" ? "/api/v1/auth/sign-in" : "/api/v1/auth/sign-up";
 
 //        try {
-//            const res = await fetch(`http://localhost:5500${endpoint}`, {
+//            const res = await fetch(`https://subscription-tracker-api-yf9b.onrender.com${endpoint}`, {
 //                method: "POST",
 //                headers: { "Content-Type": "application/json" },
 //                credentials: "include",
@@ -115,7 +115,7 @@ export default function AuthForm({ type = "login" }: { type?: "login" | "signup"
         
 
         try {
-            const res = await fetch(`http://localhost:5500${endpoint}`, {
+            const res = await fetch(`https://subscription-tracker-api-yf9b.onrender.com${endpoint}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

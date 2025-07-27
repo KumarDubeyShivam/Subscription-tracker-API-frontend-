@@ -30,7 +30,7 @@ export default function CreateSubscriptionForm({ onSuccess }: CreateSubscription
         const token = localStorage.getItem("token");
 
         try {
-            const res = await fetch("http://localhost:5500/api/v1/subscriptions", {
+            const res = await fetch("https://subscription-tracker-api-yf9b.onrender.com/api/v1/subscriptions", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
