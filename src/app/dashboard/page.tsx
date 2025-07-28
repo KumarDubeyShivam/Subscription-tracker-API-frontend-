@@ -1,5 +1,146 @@
 
 
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import '../globals.css';
+import { useRouter } from "next/navigation";
+import CreateSubscriptionForm from "../components/create-subscription.tsx";
+
+interface Subscription {
+    _id: string;
+    name: string;
+    price: number;
+    renewalDate: string;
+}
+
+interface User {
+    name: string;
+    email: string;
+}
+
+export default function Dashboard() {
+    const [user, setUser] = useState<User | null>(null);
+    const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+    const [menuOpen, setMenuOpen] = useState<boolean>(true);
+    const [showForm, setShowForm] = useState<boolean>(false);
+    const [token, setToken] = useState<string | null>(null);
+    const [userId, setuserId] = useState<string | null>(null);
+    const [userName, setuserName] = useState<string | null>(null);
+    const [userEmail, setuserEmail] = useState<string | null>(null);
+
+
+
+    useEffect(() => {
+        const t = localStorage.getItem('token');
+        if (!t) {
+            router.push("/login");
+        }
+        setToken(t);
+    }, []);
+    //const userName = localStorage.getItem('userName');
+    //const userId = localStorage.getItem('userId');
+    //const userEmail = localStorage.getItem('userEmail');
+    useEffect(() => {
+        const t = localStorage.getItem('userId');
+        console.log(t);
+        setuserId(t);
+    }, []);
+    useEffect(() => {
+        const t = localStorage.getItem('userName');
+        setuserName(t);
+    }, []);
+    useEffect(() => {
+        const t = localStorage.getItem('userEmail');
+        setuserEmail(t);
+    }, []);
+
+
+    const router = useRouter();
+
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                console.log(userId);
+                console.log(token);
+                const res = await fetch(`https://subscription-tracker-api-yf9b.onrender.com/api/v1/subscriptions/user/${localStorage.getItem('userId') }`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem('token') }`,
+                    }
+                });
+
+                const subData = await res.json();
+                setSubscriptions(subData.data || []);
+            } catch (err) {
+                console.error("Error fetching dashboard data:", err);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    return (
+        <div className="min-h-screen flex">
+            <div className={`w-64 bg-indigo-700 text-white p-6 ${menuOpen ? "block" : "hidden"} md:block`}>
+                <a href="/dashboard"><h2 className="text-xl font-semibold mb-4">Dashboard Menu</h2></a>
+                <ul className="space-y-3">
+                    <li><button onClick={() => setShowForm(true)} className="hover:text-indigo-300">Add Subscription</button></li>
+                    <li><a href="#" className="hover:text-indigo-300">Edit Subscription</a></li>
+                    <li><a href="#" className="hover:text-indigo-300">Delete Subscription</a></li>
+                </ul>
+            </div>
+
+            <div className="flex-1 bg-gray-100 p-6">
+                <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden mb-4 text-indigo-700 underline">
+                    {menuOpen ? "Hide Menu" : "Show Menu"}
+                </button>
+
+                <div className="bg-white p-6 rounded shadow">
+                    <h1 className="text-2xl font-bold mb-2">Welcome, {userName}</h1>
+                    <p className="text-sm text-gray-600 mb-6">Email: {userEmail}</p>
+
+                    {showForm && (
+                        <div className="mb-8">
+                            <CreateSubscriptionForm onSuccess={(newSub: Subscription) => {
+                                setSubscriptions(prev => [...prev, newSub]);
+                                setShowForm(false);
+                            }} />
+                        </div>
+                    )}
+
+                    <h2 className="text-xl font-semibold mb-4">Your Subscriptions</h2>
+                    {subscriptions.length === 0 ? (
+                        <p>No subscriptions found.</p>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {subscriptions.map((sub) => (
+                                <div key={sub._id} className="border p-4 rounded bg-white shadow">
+                                    <h3 className="font-semibold">{sub.name}</h3>
+                                    <p>Price: ?{sub.price}</p>
+                                    <p className="text-sm text-gray-700">Renewal: {new Date(sub.renewalDate).toLocaleDateString()}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+
+
+
+
+
+
+
 
 //"use client";
 
@@ -311,130 +452,4 @@
 
 //dashboard 2
 
-'use client';
-
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import '../globals.css';
-import { useRouter } from "next/navigation";
-import CreateSubscriptionForm from "../components/create-subscription.tsx";
-
-interface Subscription {
-    _id: string;
-    name: string;
-    price: number;
-    renewalDate: string;
-}
-
-interface User {
-    name: string;
-    email: string;
-}
-
-export default function Dashboard() {
-    const [user, setUser] = useState<User | null>(null);
-    const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-    const [menuOpen, setMenuOpen] = useState<boolean>(true);
-    const [showForm, setShowForm] = useState<boolean>(false);
-    const [token, setToken] = useState<string | null>(null);
-    const [userId, setuserId] = useState<string | null>(null);
-    const [userName, setuserNmae] = useState<string | null>(null);
-    const [userEmail, setuserEmail] = useState<string | null>(null);
-
-
-
-    useEffect(() => {
-        const t = localStorage.getItem('token');
-        if (!t) {
-            router.push("/login");
-        }
-        setToken(t);
-    }, []);
-    useEffect(() => {
-        const t = localStorage.getItem('userId');
-        setToken(t);
-    }, []);
-    useEffect(() => {
-        const t = localStorage.getItem('userName');
-        setToken(t);
-    }, []);
-    useEffect(() => {
-        const t = localStorage.getItem('userEmail');
-        setToken(t);
-    }, []);
-
-
-    const router = useRouter();
-
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch(`https://subscription-tracker-api-yf9b.onrender.com/api/v1/subscriptions/user/${userId}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-
-                const subData = await res.json();
-                setSubscriptions(subData.data || []);
-            } catch (err) {
-                console.error("Error fetching dashboard data:", err);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    return (
-        <div className="min-h-screen flex">
-            <div className={`w-64 bg-indigo-700 text-white p-6 ${menuOpen ? "block" : "hidden"} md:block`}>
-                <a href="/dashboard"><h2 className="text-xl font-semibold mb-4">Dashboard Menu</h2></a>
-                <ul className="space-y-3">
-                    <li><button onClick={() => setShowForm(true)} className="hover:text-indigo-300">Add Subscription</button></li>
-                    <li><a href="#" className="hover:text-indigo-300">Edit Subscription</a></li>
-                    <li><a href="#" className="hover:text-indigo-300">Delete Subscription</a></li>
-                </ul>
-            </div>
-
-            <div className="flex-1 bg-gray-100 p-6">
-                <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden mb-4 text-indigo-700 underline">
-                    {menuOpen ? "Hide Menu" : "Show Menu"}
-                </button>
-
-                <div className="bg-white p-6 rounded shadow">
-                    <h1 className="text-2xl font-bold mb-2">Welcome, {userName}</h1>
-                    <p className="text-sm text-gray-600 mb-6">Email: {userEmail}</p>
-
-                    {showForm && (
-                        <div className="mb-8">
-                            <CreateSubscriptionForm onSuccess={(newSub: Subscription) => {
-                                setSubscriptions(prev => [...prev, newSub]);
-                                setShowForm(false);
-                            }} />
-                        </div>
-                    )}
-
-                    <h2 className="text-xl font-semibold mb-4">Your Subscriptions</h2>
-                    {subscriptions.length === 0 ? (
-                        <p>No subscriptions found.</p>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {subscriptions.map((sub) => (
-                                <div key={sub._id} className="border p-4 rounded bg-white shadow">
-                                    <h3 className="font-semibold">{sub.name}</h3>
-                                    <p>Price: ?{sub.price}</p>
-                                    <p className="text-sm text-gray-700">Renewal: {new Date(sub.renewalDate).toLocaleDateString()}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-}
 
